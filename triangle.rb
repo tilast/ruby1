@@ -14,7 +14,18 @@
 #   about_triangle_project_2.rb
 #
 def triangle(a, b, c)
-  # WRITE THIS CODE
+  x, y, z = [a, b, c].sort
+
+  raise TriangleError.new("Some variable is negative") if x <= 0 || y <= 0 || z <= 0
+  raise TriangleError.new("This triangle can't exist") if x + y <= z
+
+  if x == y && x == z
+  	:equilateral
+  elsif x == y || x == z || y == z
+  	:isosceles
+  else
+  	:scalene
+  end
 end
 
 # Error class used in part 2.  No need to change this code.
