@@ -31,6 +31,35 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 
 def score(dice)
   # You need to write this method
+  if dice.empty?
+    return 0
+  end
+
+  result = 0
+
+  table = Hash.new(0)
+
+  dice.each { |item|
+    table[item] += 1
+  }
+
+  table.each { |key, value|
+    if value >= 3 && key == 1
+      result += 1000
+      value -= 3
+    elsif value >= 3 && key != 1
+      result += key * 100
+      value -= 3
+    end
+
+    if key == 1
+      result += value * 100
+    elsif key == 5
+      result += value * 50
+    end
+  }
+
+  result
 end
 
 class AboutScoringProject < EdgeCase::Koan
@@ -41,6 +70,7 @@ class AboutScoringProject < EdgeCase::Koan
   def test_score_of_a_single_roll_of_5_is_50
     assert_equal 50, score([5])
   end
+
 
   def test_score_of_a_single_roll_of_1_is_100
     assert_equal 100, score([1])
@@ -57,7 +87,6 @@ class AboutScoringProject < EdgeCase::Koan
   def test_score_of_a_triple_1_is_1000
     assert_equal 1000, score([1,1,1])
   end
-
   def test_score_of_other_triples_is_100x
     assert_equal 200, score([2,2,2])
     assert_equal 300, score([3,3,3])
